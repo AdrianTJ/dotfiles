@@ -1,20 +1,28 @@
-# Simple calculator
+# Simple calculator function
+alias calc='noglob calc'
 calc() {
-    local result=""
-    result="$(printf '%s\n' "scale=10;$*" | bc --mathlib | tr -d '\\\n')"
+    [[ $# -eq 0 ]] && { printf 'Usage: calc <expression>\n' >&2; return 1; }
+
+    local result
+    result="$(printf '%s\n' "scale=10;$*" | bc --mathlib 2>&1)" || {
+        printf 'calc error: %s\n' "$result" >&2
+        return 1
+    }
+
+    result="$(printf '%s' "$result" | tr -d '\\\n')"
 
     if [[ "$result" == *.* ]]; then
         printf '%s' "$result" |
-        sed -e 's/^\./0./'        \
-            -e 's/^-\./-0./'      \
-            -e 's/0*$//;s/\.$//'
+        sed -e 's/^\./0./'        `# add "0" for cases like ".5"`  \
+            -e 's/^-\./-0./'      `# add "0" for cases like "-.5"` \
+            -e 's/0*$//;s/\.$//'   # remove trailing zeros
     else
         printf '%s' "$result"
     fi
     printf '\n'
 }
 
-# Brew do everything 
+# Brew do everything
 function brewdo() {
-		brew update && brew upgrade && brew cleanup -s
+    brew update && brew upgrade && brew cleanup -s
 }
