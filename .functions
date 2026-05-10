@@ -1,5 +1,4 @@
 # Simple calculator function
-alias calc='noglob calc'
 calc() {
     [[ $# -eq 0 ]] && { printf 'Usage: calc <expression>\n' >&2; return 1; }
 
@@ -21,6 +20,7 @@ calc() {
     fi
     printf '\n'
 }
+alias calc='noglob calc'
 
 # Brew do everything
 function brewdo() {
