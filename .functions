@@ -26,3 +26,12 @@ alias calc='noglob calc'
 function brewdo() {
     brew update && brew upgrade && brew cleanup -s
 }
+
+# Git add, commit, and push
+function gap() {
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: gap \"commit message\""
+        return 1
+    fi
+    git add . && git commit -m "$1" && git push
+}
