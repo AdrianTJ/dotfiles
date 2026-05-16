@@ -14,7 +14,7 @@ A clean and minimal set of configuration files for macOS, focused on productivit
 | :--- | :--- |
 | `calc` | A quick CLI calculator with precision support. |
 | `brewdo` | Update, upgrade, and cleanup Homebrew in one go. |
-| `gap "msg"` | The ultimate shortcut: `git add .`, `commit`, and `push`. |
+| `gap "msg"` | A nice git shortcut: `git add .`, `commit`, and `push`. |
 
 ## 🚀 Quick Start
 
