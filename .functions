@@ -38,3 +38,11 @@ function gap() {
 
 # Adding a function to get IP for other bash scripts
 myip() { curl -s ifconfig.me; }
+
+# Safe remove
+rm() { 
+  ls -FCsd -- "$@"
+  read -p 'Delete? [y/N] ' ans
+  [[ "$ans" == "y" ]] && /bin/rm "$@"
+}
+
