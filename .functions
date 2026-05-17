@@ -35,3 +35,6 @@ function gap() {
     fi
     git add . && git commit -m "$1" && git push
 }
+
+# Adding a function to get IP for other bash scripts
+myip() { curl -s ifconfig.me; }
