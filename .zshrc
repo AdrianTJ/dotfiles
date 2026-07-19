@@ -36,6 +36,16 @@ BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
     && source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # ---------------------------------------------------------------------------
+# PATH & runtime version managers
+# ---------------------------------------------------------------------------
+export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"   # rust/rustup
+
+# mise — one manager for python / node / go / etc. (https://mise.jdx.dev)
+# Preferred over juggling pyenv + nvm + gvm separately. Activate only if present.
+command -v mise >/dev/null && eval "$(mise activate zsh)"
+
+# ---------------------------------------------------------------------------
 # Tools (each activated only if present)
 # ---------------------------------------------------------------------------
 # fzf — Ctrl-R fuzzy history, Ctrl-T files, Alt-C cd. Needs fzf >= 0.48.

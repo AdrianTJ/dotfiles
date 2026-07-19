@@ -1,0 +1,27 @@
+# ~/.editorconfig — consistent whitespace across every editor and every language.
+# Drop a copy in a repo root, or keep this global one honored by most editors.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# Web / config land uses 2 spaces by convention.
+[*.{js,jsx,ts,tsx,json,jsonc,css,scss,html,yml,yaml,toml}]
+indent_size = 2
+
+# Go is tabs, always.
+[*.go]
+indent_style = tab
+
+# Makefiles require real tabs.
+[{Makefile,*.mk}]
+indent_style = tab
+
+# Don't strip trailing spaces in Markdown (two of them mean a hard line break).
+[*.md]
+trim_trailing_whitespace = false
