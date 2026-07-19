@@ -1,0 +1,57 @@
+# ~/.gitconfig
+#
+# Identity is intentionally NOT stored here (this file is public). Keep your
+# name/email/signingkey in ~/.gitconfig.local, which is included at the bottom.
+# See the README for the one-liner to create it.
+
+[init]
+    defaultBranch = main
+
+[push]
+    autoSetupRemote = true   # first push of a new branch just works, no -u needed
+    default = simple
+    followTags = true
+
+[pull]
+    rebase = true            # keep history linear instead of merge-commit noise
+
+[fetch]
+    prune = true             # drop local refs for branches deleted on the remote
+
+[rebase]
+    autoStash = true         # stash/pop dirty tree around a rebase automatically
+
+[merge]
+    conflictstyle = zdiff3   # show the common ancestor in conflict markers
+
+[diff]
+    colorMoved = default     # distinguish moved lines from added/removed
+    algorithm = histogram
+
+[rerere]
+    enabled = true           # remember & replay conflict resolutions
+
+[color]
+    ui = auto
+
+[core]
+    excludesfile = ~/.gitignore_global
+
+[alias]
+    st = status -sb
+    co = checkout
+    sw = switch
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD --stat
+    amend = commit --amend --no-edit
+    undo = reset --soft HEAD~1        # undo last commit, keep the changes staged
+    aliases = config --get-regexp ^alias\\.
+    # one-line graph log
+    lg = log --graph --abbrev-commit --decorate \
+        --format=format:'%C(bold blue)%h%C(reset) %C(dim white)%an%C(reset) %C(green)(%ar)%C(reset)%C(auto)%d%C(reset) %s'
+
+# Machine-local overrides (identity, signing, work vs personal). Never tracked.
+[include]
+    path = ~/.gitconfig.local

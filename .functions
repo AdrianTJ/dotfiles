@@ -27,22 +27,68 @@ function brewdo() {
     brew update && brew upgrade && brew cleanup -s
 }
 
-# Git add, commit, and push
+# Git add, commit, and push — with a guard against auto-pushing to main/master.
 function gap() {
     if [[ $# -eq 0 ]]; then
-        echo "Usage: gap \"commit message\""
+        echo 'Usage: gap "commit message"' >&2
         return 1
     fi
-    git add . && git commit -m "$1" && git push
+    local branch
+    branch="$(git symbolic-ref --short HEAD 2>/dev/null)" || {
+        echo 'gap: not inside a git repository' >&2
+        return 1
+    }
+    if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+        printf 'gap: refusing to auto-commit+push to "%s". Do it manually.\n' "$branch" >&2
+        return 1
+    fi
+    # push.autoSetupRemote in ~/.gitconfig handles the first push of a new branch.
+    git add -A && git commit -m "$1" && git push
 }
 
 # Adding a function to get IP for other bash scripts
 myip() { curl -s ifconfig.me; }
 
-# Safe remove
-rm() { 
-  ls -FCsd -- "$@"
-  read -p 'Delete? [y/N] ' ans
-  [[ "$ans" == "y" ]] && /bin/rm "$@"
+# Safe remove — lists targets, then asks before deleting.
+# Named `del` (not an `rm` override) so scripts and other machines keep the real rm.
+# Uses zsh's `read "var?prompt"` form; bash-style `read -p` does not prompt in zsh.
+del() {
+    [[ $# -eq 0 ]] && { printf 'Usage: del <file>...\n' >&2; return 1; }
+    ls -FCsd -- "$@"
+    local ans
+    read "ans?Delete? [y/N] "
+    [[ "$ans" == [yY] ]] && /bin/rm -- "$@"
+}
+
+# Make a directory (and parents) then cd into it.
+mkcd() {
+    [[ $# -eq 1 ]] || { printf 'Usage: mkcd <dir>\n' >&2; return 1; }
+    mkdir -p -- "$1" && cd -- "$1"
+}
+
+# Clone a repo and cd into it. Accepts a full URL or GitHub "owner/repo" shorthand.
+gclone() {
+    [[ $# -eq 1 ]] || { printf 'Usage: gclone <url|owner/repo>\n' >&2; return 1; }
+    local url="$1"
+    [[ "$url" != *://* && "$url" != git@* ]] && url="https://github.com/$url.git"
+    git clone "$url" && cd -- "$(basename "${url%.git}")"
+}
+
+# Extract just about any archive without remembering the flags.
+extract() {
+    [[ -f "$1" ]] || { printf 'extract: "%s" is not a file\n' "$1" >&2; return 1; }
+    case "$1" in
+        *.tar.bz2|*.tbz2) tar xjf "$1"   ;;
+        *.tar.gz|*.tgz)   tar xzf "$1"   ;;
+        *.tar.xz|*.txz)   tar xJf "$1"   ;;
+        *.tar)            tar xf  "$1"   ;;
+        *.gz)             gunzip  "$1"   ;;
+        *.bz2)            bunzip2 "$1"   ;;
+        *.zip)            unzip   "$1"   ;;
+        *.rar)            unrar x "$1"   ;;
+        *.7z)             7z x    "$1"   ;;
+        *.Z)              uncompress "$1" ;;
+        *) printf 'extract: unknown archive type: %s\n' "$1" >&2; return 1 ;;
+    esac
 }
 

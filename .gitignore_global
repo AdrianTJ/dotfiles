@@ -1,0 +1,43 @@
+# ~/.gitignore_global — machine/editor/OS junk that should NEVER be committed
+# to any repo. Wire it up with: git config --global core.excludesfile ~/.gitignore_global
+# (already set by this repo's .gitconfig).
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon[]
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.\#*
+\#*\#
+
+# --- Environments / secrets (belt-and-suspenders; still commit .env.example) ---
+.env
+.env.local
+.direnv/
+
+# --- Language / tool scratch ---
+__pycache__/
+*.py[cod]
+.venv/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+node_modules/
+.DS_Store
+target/          # rust/cargo build output
+*.log

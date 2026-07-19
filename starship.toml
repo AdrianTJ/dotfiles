@@ -1,0 +1,60 @@
+# ~/.config/starship.toml
+# A compact, single-line prompt that surfaces exactly what a polyglot needs:
+# path, git state, and the toolchain of whatever project you're standing in.
+# Symbols below use Nerd Font glyphs (you already run UbuntuMono Nerd Font).
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 1000
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+$character\
+"""
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold cyan"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "bold yellow"
+
+[cmd_duration]
+min_time = 2000                 # only show when a command took >2s
+format = "took [$duration]($style) "
+style = "italic dimmed white"
+
+[python]
+symbol = " "
+format = '[$symbol$version( \($virtualenv\))]($style) '
+style = "yellow"
+
+[nodejs]
+symbol = " "
+style = "green"
+
+[rust]
+symbol = " "
+style = "red"
+
+[golang]
+symbol = " "
+style = "cyan"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
