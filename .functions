@@ -39,10 +39,14 @@ function gap() {
 # Adding a function to get IP for other bash scripts
 myip() { curl -s ifconfig.me; }
 
-# Safe remove
-rm() { 
-  ls -FCsd -- "$@"
-  read -p 'Delete? [y/N] ' ans
-  [[ "$ans" == "y" ]] && /bin/rm "$@"
+# Safe remove — lists targets, then asks before deleting.
+# Named `del` (not an `rm` override) so scripts and other machines keep the real rm.
+# Uses zsh's `read "var?prompt"` form; bash-style `read -p` does not prompt in zsh.
+del() {
+    [[ $# -eq 0 ]] && { printf 'Usage: del <file>...\n' >&2; return 1; }
+    ls -FCsd -- "$@"
+    local ans
+    read "ans?Delete? [y/N] "
+    [[ "$ans" == [yY] ]] && /bin/rm -- "$@"
 }
 
