@@ -27,13 +27,23 @@ function brewdo() {
     brew update && brew upgrade && brew cleanup -s
 }
 
-# Git add, commit, and push
+# Git add, commit, and push — with a guard against auto-pushing to main/master.
 function gap() {
     if [[ $# -eq 0 ]]; then
-        echo "Usage: gap \"commit message\""
+        echo 'Usage: gap "commit message"' >&2
         return 1
     fi
-    git add . && git commit -m "$1" && git push
+    local branch
+    branch="$(git symbolic-ref --short HEAD 2>/dev/null)" || {
+        echo 'gap: not inside a git repository' >&2
+        return 1
+    }
+    if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+        printf 'gap: refusing to auto-commit+push to "%s". Do it manually.\n' "$branch" >&2
+        return 1
+    fi
+    # push.autoSetupRemote in ~/.gitconfig handles the first push of a new branch.
+    git add -A && git commit -m "$1" && git push
 }
 
 # Adding a function to get IP for other bash scripts
