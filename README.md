@@ -18,43 +18,48 @@ fresh Mac before you've finished `brew install`-ing everything.
 | [`.editorconfig`](.editorconfig) | `~/.editorconfig` | Consistent whitespace across editors & languages |
 | [`starship.toml`](starship.toml) | `~/.config/starship.toml` | Compact, language-aware prompt |
 | [`ghostty_config`](ghostty_config) | `~/Library/Application Support/com.mitchellh.ghostty/config` | Terminal emulator config |
+| [`install.sh`](install.sh) | — | One-shot installer (deps + symlinks) |
+| [`Brewfile`](Brewfile) | — | Declarative Homebrew dependency list |
 
 ## 🚀 Install
 
-Clone, then symlink. From the repo directory:
+One command from the repo directory:
 
 ```bash
-DOT="$PWD"
-
-mkdir -p ~/.local/bin ~/.config
-
-ln -sf "$DOT/.zshrc"            ~/.zshrc
-ln -sf "$DOT/.functions"        ~/.local/bin/.functions
-ln -sf "$DOT/.gitconfig"        ~/.gitconfig
-ln -sf "$DOT/.gitignore_global" ~/.gitignore_global
-ln -sf "$DOT/.editorconfig"     ~/.editorconfig
-ln -sf "$DOT/starship.toml"     ~/.config/starship.toml
-ln -sf "$DOT/ghostty_config"    "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+./install.sh
 ```
 
-Then set your git identity **outside** the tracked config (this file is public):
+It will:
+
+1. Install Homebrew (if missing) and everything in the [`Brewfile`](Brewfile)
+   via `brew bundle` — CLI tools, Ghostty, and the UbuntuMono Nerd Font.
+2. Symlink every config into place (backing up any existing real file to
+   `<file>.bak` first).
+3. Create `~/.gitconfig.local` with a git-identity skeleton for you to edit.
+
+It's **idempotent** — re-run it any time; already-correct links are skipped.
 
 ```bash
-cat > ~/.gitconfig.local <<'EOF'
-[user]
-    name = Adrian TJ
-    email = you@example.com
-    # signingkey = <ssh-or-gpg-key>   # optional
-EOF
+./install.sh --no-brew   # symlink only, skip package install
+./install.sh --help
 ```
 
-### Dependencies
-
-Install the CLI extras the configs light up:
+After it runs, edit your identity (this repo is public, so it's kept out of the
+tracked `.gitconfig`):
 
 ```bash
+$EDITOR ~/.gitconfig.local     # set name + email
+```
+
+### Manual dependencies
+
+If you'd rather not run the script, the tools are:
+
+```bash
+brew bundle --file=Brewfile
+# or, minimally:
 brew install starship fzf zoxide eza bat mise \
-             zsh-autosuggestions zsh-syntax-highlighting
+             zsh-autosuggestions zsh-syntax-highlighting bc
 ```
 
 Nothing here breaks if a tool is missing — you'll just get the plain version of
