@@ -13,6 +13,7 @@ brew "zsh-syntax-highlighting"
 
 # --- Utilities used by .functions ---
 brew "bc"                       # calc()
+brew "mosh"                     # roaming SSH for flaky connections
 
 # --- Runtime manager (Python / Node / Go / ...) ---
 brew "mise"
