@@ -90,12 +90,6 @@ link() {
     ok "$dest"
 }
 
-# Portable Claude/agent layer. Individual links (not all of ~/.claude) so
-# machine-local state — settings, history, credentials — stays untouched.
-link "claude/CLAUDE.md"  "$HOME/.claude/CLAUDE.md"
-link "claude/commands"   "$HOME/.claude/commands"
-link "claude/CLAUDE.md"  "$HOME/.codex/AGENTS.md"    # same rules for AGENTS.md-reading tools
-
 link ".zshrc"            "$HOME/.zshrc"
 link ".functions"        "$HOME/.local/bin/.functions"
 link ".gitconfig"        "$HOME/.gitconfig"

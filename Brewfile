@@ -16,7 +16,8 @@ brew "bc"                       # calc()
 
 # --- Runtime manager (Python / Node / Go / ...) ---
 brew "mise"
+brew "gh"                        # git credential helper (see .gitconfig)
 
 # --- Terminal + font (font fixes Nerd Font glyphs in the prompt) ---
 cask "ghostty"
-cask "font-ubuntu-mono-nerd-font"
+cask "font-ioskeley-mono"

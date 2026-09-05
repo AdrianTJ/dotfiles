@@ -7,6 +7,15 @@
 [init]
     defaultBranch = main
 
+# GitHub HTTPS auth via the gh CLI (installed by the Brewfile). Path only —
+# the token itself lives in gh's keychain-backed store, set up by `gh auth login`.
+[credential "https://github.com"]
+    helper =
+    helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+    helper =
+    helper = !/opt/homebrew/bin/gh auth git-credential
+
 [push]
     autoSetupRemote = true   # first push of a new branch just works, no -u needed
     default = simple

@@ -2,11 +2,14 @@
 # Docs: https://ghostty.org/docs/config  (`ghostty +show-config --default --docs`)
 
 # keybinds
-keybind = global:cmd+`=toggle_quick_terminal
+keybind = global:ctrl+cmd+shift+alt+space=toggle_quick_terminal
 
 # fonts
-font-family = UbuntuMono Nerd Font Mono
-font-size = 16
+font-family = IoskeleyMono Nerd Font
+font-size = 14
 
 # theme
-theme = light: Monokai Pro Light Sun, dark: Monokai Pro
+theme = light: Aizen Light, dark: Monokai Pro
+
+# icon
+macos-icon = blueprint
