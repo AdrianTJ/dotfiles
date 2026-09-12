@@ -21,7 +21,7 @@ fresh Mac before you've finished `brew install`-ing everything.
 | [`handy/`](handy) | `~/Library/Application Support/com.pais.handy/settings_store.json` (applied, not linked) | Handy dictation: Hyperkey+Space, Parakeet Unified EN model |
 | [`claude/CLAUDE.md`](claude/CLAUDE.md) | `~/.claude/CLAUDE.md` + `~/.codex/AGENTS.md` | Global agent conventions ([`AGENTS.md`](AGENTS.md) is a symlink to it) |
 | [`claude/commands/`](claude/commands) | `~/.claude/commands` | Custom slash commands for Claude Code |
-| [`install.sh`](install.sh) | — | One-shot installer (deps + symlinks) |
+| [`install.sh`](install.sh) | — | One-shot installer (deps, symlinks, app config) |
 | [`Brewfile`](Brewfile) | — | Declarative Homebrew dependency list |
 
 ## 🚀 Install
@@ -38,7 +38,9 @@ It will:
    via `brew bundle` — CLI tools, Ghostty, and the UbuntuMono Nerd Font.
 2. Symlink every config into place (backing up any existing real file to
    `<file>.bak` first).
-3. Create `~/.gitconfig.local` with a git-identity skeleton for you to edit.
+3. Apply the config that can't be symlinked — currently Handy's dictation
+   settings (a no-op when Handy isn't installed).
+4. Create `~/.gitconfig.local` with a git-identity skeleton for you to edit.
 
 It's **idempotent** — re-run it any time; already-correct links are skipped.
 
