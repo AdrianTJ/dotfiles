@@ -8,19 +8,31 @@
 # everything else in the store (history limits, post-processing, keys) is left
 # alone. Idempotent — re-run any time.
 #
-# Three settings here are deliberately non-default:
+# The settings here are deliberately non-default:
 #   keyboard_implementation = tauri
 #     The default (handy_keys) tracks modifier state from flagsChanged events,
 #     which the Hyperkey app never emits — it ORs the modifiers into each key
 #     event instead. With handy_keys, Hyperkey+Space registers but never fires.
-#   reliable_paste = true
-#     The default paste restores the clipboard on a fixed 60 ms timer
-#     (paste_delay_after_ms). A terminal reads the clipboard asynchronously and
-#     loses that race, so nothing appears. Reliable paste waits for the target
-#     to actually read the transcript; the raised delay covers the fallback.
+#   reliable_paste = false, paste_delay_after_ms = 800
+#     Reliable paste publishes the transcript as a lazy promise on the macOS
+#     pasteboard instead of real data. Ghostty (and terminals generally) read a
+#     large payload in two passes: it pings the promise, then re-reads for the
+#     content. Handy tears the promise down after a ~200 ms quiet period, so the
+#     second read finds the previous clipboard and the transcript vanishes
+#     silently. Short text fits the first read, which is why the failure looked
+#     intermittent. The plain-text path materialises the data up front (the
+#     target reads ~106 ms after the chord), so 800 ms of margin before the
+#     unconditional restore is ample. Revisit if upstream fixes the two-pass
+#     read. paste_delay_ms stays at its 60 ms default and is not pinned here.
 #   selected_model = ...Q8_0.gguf
 #     Parakeet Unified EN 0.6B. Handy resolves it from the shared Hugging Face
 #     cache, so there is a single copy of the model on disk.
+#   custom_words = [...]
+#     Handy matches these fuzzily against the transcript with a Soundex
+#     phonetic boost, so an entry that merely *sounds* like everyday English
+#     silently rewrites ordinary dictation (ONNX ate "once", OpenAI ate "open",
+#     RAG ate "rag"). Only collision-free terms are tracked; adding a word that
+#     sounds like common speech will corrupt normal dictation.
 
 set -euo pipefail
 
