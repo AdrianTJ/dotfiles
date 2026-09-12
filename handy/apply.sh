@@ -15,7 +15,7 @@
 #     event instead. With handy_keys, Hyperkey+Space registers but never fires.
 #   selected_model = ...Q8_0.gguf
 #     Parakeet Unified EN 0.6B. Handy resolves it from the shared Hugging Face
-#     cache, so pi-transcribe and Handy use one copy.
+#     cache, so there is a single copy of the model on disk.
 
 set -euo pipefail
 
