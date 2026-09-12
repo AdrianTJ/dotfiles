@@ -11,10 +11,9 @@ calc() {
     result="$(printf '%s' "$result" | tr -d '\\\n')"
 
     if [[ "$result" == *.* ]]; then
+        # add leading 0 for ".5" / "-.5", then strip trailing zeros and a bare dot
         printf '%s' "$result" |
-        sed -e 's/^\./0./'        `# add "0" for cases like ".5"`  \
-            -e 's/^-\./-0./'      `# add "0" for cases like "-.5"` \
-            -e 's/0*$//;s/\.$//'   # remove trailing zeros
+        sed -e 's/^\./0./' -e 's/^-\./-0./' -e 's/0*$//;s/\.$//'
     else
         printf '%s' "$result"
     fi
