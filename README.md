@@ -18,6 +18,7 @@ fresh Mac before you've finished `brew install`-ing everything.
 | [`.editorconfig`](.editorconfig) | `~/.editorconfig` | Consistent whitespace across editors & languages |
 | [`starship.toml`](starship.toml) | `~/.config/starship.toml` | Compact, language-aware prompt |
 | [`ghostty_config`](ghostty_config) | `~/Library/Application Support/com.mitchellh.ghostty/config` | Terminal emulator config |
+| [`handy/`](handy) | `~/Library/Application Support/com.pais.handy/settings_store.json` (applied, not linked) | Handy dictation: Hyperkey+Space, Parakeet Unified EN model |
 | [`claude/CLAUDE.md`](claude/CLAUDE.md) | `~/.claude/CLAUDE.md` + `~/.codex/AGENTS.md` | Global agent conventions ([`AGENTS.md`](AGENTS.md) is a symlink to it) |
 | [`claude/commands/`](claude/commands) | `~/.claude/commands` | Custom slash commands for Claude Code |
 | [`install.sh`](install.sh) | — | One-shot installer (deps + symlinks) |
