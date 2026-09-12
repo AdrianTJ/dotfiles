@@ -33,6 +33,11 @@
 #     silently rewrites ordinary dictation (ONNX ate "once", OpenAI ate "open",
 #     RAG ate "rag"). Only collision-free terms are tracked; adding a word that
 #     sounds like common speech will corrupt normal dictation.
+#
+# Order matters: Handy holds the store in memory and rewrites the whole file
+# when it exits, so a running instance clobbers any external merge on quit.
+# Quit it first, then merge, then start it — otherwise exactly the keys this
+# script is trying to change are the ones that silently revert.
 
 set -euo pipefail
 
@@ -51,6 +56,18 @@ fi
 if [ ! -f "$store" ]; then
     echo "  handy: no settings store yet — launch Handy once, then re-run"
     exit 0
+fi
+
+# Handy rewrites the store from memory on exit, so it must be stopped before
+# the merge — not after, or its shutdown flush undoes the merge.
+was_running=false
+if pgrep -f "Handy.app/Contents/MacOS/handy" >/dev/null 2>&1; then
+    was_running=true
+    osascript -e 'tell application "Handy" to quit' >/dev/null 2>&1 || true
+    for _ in $(seq 1 20); do
+        pgrep -q -f "Handy.app/Contents/MacOS/handy" || break
+        sleep 0.5
+    done
 fi
 
 python3 - "$store" "$fragment" <<'PY'
@@ -85,13 +102,8 @@ os.replace(tmp, store_path)
 print("  handy: applied " + ", ".join(sorted(fragment)))
 PY
 
-# Handy reads the store at startup, so restart it if it is running.
-if pgrep -f "Handy.app/Contents/MacOS/handy" >/dev/null 2>&1; then
-    osascript -e 'tell application "Handy" to quit' >/dev/null 2>&1 || true
-    for _ in $(seq 1 20); do
-        pgrep -q -f "Handy.app/Contents/MacOS/handy" || break
-        sleep 0.5
-    done
+# Handy reads the store at startup, so bring it back up (and only if it was).
+if [ "$was_running" = true ]; then
     open -a Handy
     echo "  handy: restarted"
 fi
