@@ -19,8 +19,6 @@ fresh Mac before you've finished `brew install`-ing everything.
 | [`starship.toml`](starship.toml) | `~/.config/starship.toml` | Compact, language-aware prompt |
 | [`ghostty_config`](ghostty_config) | `~/Library/Application Support/com.mitchellh.ghostty/config` | Terminal emulator config |
 | [`handy/`](handy) | `~/Library/Application Support/com.pais.handy/settings_store.json` (applied, not linked) | Handy dictation: Hyperkey+Space, Parakeet Unified EN model |
-| [`claude/CLAUDE.md`](claude/CLAUDE.md) | `~/.claude/CLAUDE.md` + `~/.codex/AGENTS.md` | Global agent conventions ([`AGENTS.md`](AGENTS.md) is a symlink to it) |
-| [`claude/commands/`](claude/commands) | `~/.claude/commands` | Custom slash commands for Claude Code |
 | [`install.sh`](install.sh) | — | One-shot installer (deps, symlinks, app config) |
 | [`Brewfile`](Brewfile) | — | Declarative Homebrew dependency list |
 
@@ -35,7 +33,7 @@ One command from the repo directory:
 It will:
 
 1. Install Homebrew (if missing) and everything in the [`Brewfile`](Brewfile)
-   via `brew bundle` — CLI tools, Ghostty, and the UbuntuMono Nerd Font.
+   via `brew bundle` — CLI tools, `gh`, Ghostty, and the IoskeleyMono Nerd Font.
 2. Symlink every config into place (backing up any existing real file to
    `<file>.bak` first).
 3. Apply the config that can't be symlinked — currently Handy's dictation
@@ -63,7 +61,7 @@ If you'd rather not run the script, the tools are:
 ```bash
 brew bundle --file=Brewfile
 # or, minimally:
-brew install starship fzf zoxide eza bat mise \
+brew install starship fzf zoxide eza bat mise gh \
              zsh-autosuggestions zsh-syntax-highlighting bc
 ```
 
@@ -119,31 +117,10 @@ conflict markers.
 Core tools (`cat`, `rm`) are intentionally left untouched — `bat` is available
 as `catp` and safe delete as `del`, so scripts and other machines behave normally.
 
-## 🤖 Agent layer
-
-A portable Claude Code / agent setup that travels with these dotfiles:
-
-- **[`claude/CLAUDE.md`](claude/CLAUDE.md)** — global conventions loaded in every
-  session: descriptive branch names, commits authored as me with Claude as
-  co-author trailer, no PR attribution blocks, per-language verify commands.
-  Kept deliberately tiny — only rules that apply everywhere and that an agent
-  can't guess. `AGENTS.md` symlinks to it for tools that read the
-  [open standard](https://agents.md/).
-- **Slash commands** ([`claude/commands/`](claude/commands)):
-
-| Command | Description |
-| :--- | :--- |
-| `/verify` | Detect the stack, run its tests/lint/typecheck, report — fix nothing. |
-| `/ship` | `/verify` → branch-check → commit (me + Claude co-author) → push. PR only on request. |
-| `/pkg <name>` | `brew install` a package **and** add it to the Brewfile, committed. |
-| `/tweak <change>` | Apply a config change in this repo (source of truth), never the live file. |
-
-`install.sh` links `claude/` into `~/.claude/` file-by-file, so machine-local
-state (settings, history, credentials) is never touched.
-
 ## 🎨 Terminal aesthetic
 
 - **Terminal:** [Ghostty](https://ghostty.org)
-- **Font:** UbuntuMono Nerd Font Mono, 16pt
-- **Theme:** Monokai Pro (auto light/dark)
-- **Quick terminal:** ``Cmd + ` ``
+- **Font:** IoskeleyMono Nerd Font, 14pt
+- **Theme:** Aizen Light / Monokai Pro (auto light/dark)
+- **Icon:** blueprint
+- **Quick terminal:** `Ctrl+Cmd+Shift+Alt+Space`

@@ -13,10 +13,14 @@ brew "zsh-syntax-highlighting"
 
 # --- Utilities used by .functions ---
 brew "bc"                       # calc()
+brew "mosh"                     # roaming SSH for flaky connections
+brew "uv"                       # Python project/venv manager
+brew "tailscale"                # VPN
 
 # --- Runtime manager (Python / Node / Go / ...) ---
 brew "mise"
+brew "gh"                        # git credential helper (see .gitconfig)
 
 # --- Terminal + font (font fixes Nerd Font glyphs in the prompt) ---
 cask "ghostty"
-cask "font-ubuntu-mono-nerd-font"
+cask "font-ioskeley-mono"
