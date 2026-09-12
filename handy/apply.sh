@@ -8,11 +8,16 @@
 # everything else in the store (history limits, post-processing, keys) is left
 # alone. Idempotent — re-run any time.
 #
-# Two settings here are deliberately non-default:
+# Three settings here are deliberately non-default:
 #   keyboard_implementation = tauri
 #     The default (handy_keys) tracks modifier state from flagsChanged events,
 #     which the Hyperkey app never emits — it ORs the modifiers into each key
 #     event instead. With handy_keys, Hyperkey+Space registers but never fires.
+#   reliable_paste = true
+#     The default paste restores the clipboard on a fixed 60 ms timer
+#     (paste_delay_after_ms). A terminal reads the clipboard asynchronously and
+#     loses that race, so nothing appears. Reliable paste waits for the target
+#     to actually read the transcript; the raised delay covers the fallback.
 #   selected_model = ...Q8_0.gguf
 #     Parakeet Unified EN 0.6B. Handy resolves it from the shared Hugging Face
 #     cache, so there is a single copy of the model on disk.
