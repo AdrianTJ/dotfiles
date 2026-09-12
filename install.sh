@@ -105,7 +105,15 @@ link "starship.toml"     "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 link "ghostty_config"    "$GHOSTTY_DEST"
 
 # ---------------------------------------------------------------------------
-# 3. Git identity (kept out of the tracked, public .gitconfig)
+# 3. App config that cannot be symlinked
+# ---------------------------------------------------------------------------
+# Handy rewrites its settings store on every change, so a symlink would be
+# clobbered; it is applied instead. No-op when Handy is not installed.
+bold "Applying app config"
+"$DOTFILES/handy/apply.sh"
+
+# ---------------------------------------------------------------------------
+# 4. Git identity (kept out of the tracked, public .gitconfig)
 # ---------------------------------------------------------------------------
 bold "Git identity"
 LOCAL_GITCONFIG="$HOME/.gitconfig.local"

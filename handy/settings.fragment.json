@@ -1,0 +1,11 @@
+{
+  "keyboard_implementation": "tauri",
+  "push_to_talk": false,
+  "selected_language": "en",
+  "selected_model": "handy-computer/parakeet-unified-en-0.6b-gguf/parakeet-unified-en-0.6b-Q8_0.gguf",
+  "bindings": {
+    "transcribe": {
+      "current_binding": "ctrl+option+shift+command+space"
+    }
+  }
+}
