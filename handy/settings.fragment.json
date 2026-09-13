@@ -3,6 +3,7 @@
   "push_to_talk": false,
   "reliable_paste": false,
   "paste_delay_after_ms": 800,
+  "clipboard_handling": "copy_to_clipboard",
   "selected_language": "en",
   "selected_model": "handy-computer/parakeet-unified-en-0.6b-gguf/parakeet-unified-en-0.6b-Q8_0.gguf",
   "custom_words": [
