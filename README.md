@@ -146,9 +146,7 @@ in its header. In brief, the non-obvious ones:
   `~/.local/bin/handy-paste` and points Handy at it.
 - **`clipboard_handling = copy_to_clipboard`** leaves the transcript on the
   clipboard, so an insertion that fails can still be pasted by hand.
-- **`custom_words`** are matched fuzzily (Levenshtein + Soundex + n-grams), so a
-  word that merely *sounds* like everyday English will silently rewrite ordinary
-  dictation. Only collision-free terms belong in that list.
+- **The custom dictionary is retired** (2026-09-13). Handy matched `custom_words` fuzzily (Levenshtein + Soundex + n-grams), so any term that merely *sounded* like everyday English silently rewrote ordinary dictation — "Perplexity" ate "a problem". The list is gone; `apply.sh` removes the key from the store via a `null` marker in the fragment.
 
 The paste helper sends its chord via System Events, so Handy needs
 **Accessibility** permission for it to work.
