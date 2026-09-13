@@ -45,6 +45,21 @@
 #     late read still finds it. The cost is that Handy no longer restores the
 #     previous clipboard contents after dictating — which suits a
 #     dictation-heavy workflow that already copies transcripts by hand.
+#   paste_method = direct (type the text, do not use the clipboard)
+#     Keeping the transcript on the clipboard was not enough on its own: the
+#     Chromium clipboard read also refuses when it cannot associate the read
+#     with a real paste gesture. Blink's clipboard_promise.cc grants an implicit
+#     read only while a paste event is being dispatched (Orca suppresses the
+#     native paste first) and otherwise requires transient user activation,
+#     which expires ~5 s in — and separately rejects the read outright with
+#     "Clipboard contents changed since paste event started" if anything writes
+#     the clipboard mid-read. Every one of those failures is silent: Orca guards
+#     the paste on a truthy read and drops the error, so nothing appears and
+#     nothing is logged. Typing the characters sidesteps the clipboard APIs
+#     entirely, which is the only fix that does not depend on Orca changing.
+#     Slower than a paste for long text, and it is the setting to revisit if
+#     Orca ever reads the clipboard via Electron's main process (which has no
+#     permission gate and no activation requirement).
 #
 # Order matters: Handy holds the store in memory and rewrites the whole file
 # when it exits, so a running instance clobbers any external merge on quit.
