@@ -33,6 +33,18 @@
 #     silently rewrites ordinary dictation (ONNX ate "once", OpenAI ate "open",
 #     RAG ate "rag"). Only collision-free terms are tracked; adding a word that
 #     sounds like common speech will corrupt normal dictation.
+#   clipboard_handling = copy_to_clipboard
+#     Orca's terminal is Ghostty's core embedded in an Electron renderer, and
+#     it reads the clipboard asynchronously in JS (its own keydown handler
+#     suppresses the native paste event first). The default dont_modify lets
+#     Handy restore — or clear — the clipboard on an 800 ms timer, so a long
+#     transcript loses the race against that async read: the read comes back
+#     empty and nothing is pasted, with no error anywhere. Measured symptom was
+#     only long dictations, because a longer string takes longer to cross
+#     Electron's IPC boundary. Leaving the transcript on the clipboard means a
+#     late read still finds it. The cost is that Handy no longer restores the
+#     previous clipboard contents after dictating — which suits a
+#     dictation-heavy workflow that already copies transcripts by hand.
 #
 # Order matters: Handy holds the store in memory and rewrites the whole file
 # when it exits, so a running instance clobbers any external merge on quit.
