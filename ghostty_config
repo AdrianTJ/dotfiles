@@ -5,7 +5,7 @@
 keybind = global:ctrl+cmd+shift+alt+space=toggle_quick_terminal
 
 # fonts
-font-family = IoskeleyMono Nerd Font
+font-family = JetBrainsMono Nerd Font
 font-size = 14
 
 # theme

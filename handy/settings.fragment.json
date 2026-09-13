@@ -12,7 +12,6 @@
     "ChatGPT",
     "Claude",
     "Mistral",
-    "Anthropic",
     "Perplexity",
     "Midjourney",
     "Hugging Face",
@@ -51,7 +50,8 @@
     "guardrails",
     "benchmark",
     "reasoning model",
-    "temperature"
+    "temperature",
+    "dotfiles"
   ],
   "bindings": {
     "transcribe": {

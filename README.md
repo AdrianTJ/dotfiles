@@ -18,7 +18,7 @@ fresh Mac before you've finished `brew install`-ing everything.
 | [`.editorconfig`](.editorconfig) | `~/.editorconfig` | Consistent whitespace across editors & languages |
 | [`starship.toml`](starship.toml) | `~/.config/starship.toml` | Compact, language-aware prompt |
 | [`ghostty_config`](ghostty_config) | `~/Library/Application Support/com.mitchellh.ghostty/config` | Terminal emulator config |
-| [`handy/`](handy) | `~/Library/Application Support/com.pais.handy/settings_store.json` (applied, not linked) | Handy dictation: Hyperkey+Space, Parakeet Unified EN model |
+| [`handy/`](handy) | `~/Library/Application Support/com.pais.handy/settings_store.json` (applied, not linked) | Handy dictation: Hyperkey+Space, Parakeet Unified EN model, paste helper |
 | [`install.sh`](install.sh) | — | One-shot installer (deps, symlinks, app config) |
 | [`Brewfile`](Brewfile) | — | Declarative Homebrew dependency list |
 
@@ -33,11 +33,11 @@ One command from the repo directory:
 It will:
 
 1. Install Homebrew (if missing) and everything in the [`Brewfile`](Brewfile)
-   via `brew bundle` — CLI tools, `gh`, Ghostty, and the IoskeleyMono Nerd Font.
+   via `brew bundle` — CLI tools, `gh`, Ghostty, and the JetBrainsMono Nerd Font.
 2. Symlink every config into place (backing up any existing real file to
    `<file>.bak` first).
-3. Apply the config that can't be symlinked — currently Handy's dictation
-   settings (a no-op when Handy isn't installed).
+3. Apply the config that can't be symlinked — Handy's dictation settings plus
+   the paste helper it depends on (a no-op when Handy isn't installed).
 4. Create `~/.gitconfig.local` with a git-identity skeleton for you to edit.
 
 It's **idempotent** — re-run it any time; already-correct links are skipped.
@@ -63,6 +63,8 @@ brew bundle --file=Brewfile
 # or, minimally:
 brew install starship fzf zoxide eza bat mise gh \
              zsh-autosuggestions zsh-syntax-highlighting bc
+brew install --cask ghostty font-jetbrains-mono-nerd-font \
+                    handy hyperkey rectangle stats
 ```
 
 Nothing here breaks if a tool is missing — you'll just get the plain version of
@@ -117,10 +119,45 @@ conflict markers.
 Core tools (`cat`, `rm`) are intentionally left untouched — `bat` is available
 as `catp` and safe delete as `del`, so scripts and other machines behave normally.
 
+## 🎙️ Handy dictation
+
+[Handy](https://github.com/cjpais/Handy) transcribes locally — no audio leaves
+the machine. On a fresh Mac the order matters:
+
+1. `brew bundle` installs Handy and Hyperkey (see [`Brewfile`](Brewfile)).
+2. **Launch Handy once** and finish onboarding — grant Microphone and
+   **Accessibility**, pick a speech model. Handy only writes its settings store
+   on first launch, and `apply.sh` has nothing to write until that exists.
+3. Re-run `./install.sh`, or just `./handy/apply.sh` (it is idempotent).
+
+[`handy/apply.sh`](handy/apply.sh) carries the full rationale for every setting
+in its header. In brief, the non-obvious ones:
+
+- **Hyperkey is a dependency, not a preference.** The hotkey is
+  `Ctrl+Opt+Shift+Cmd+Space`, and `keyboard_implementation = tauri` is pinned
+  *because* Hyperkey ORs every modifier into each key event instead of emitting
+  the `flagsChanged` events Handy's default tracker reads. Install Handy without
+  Hyperkey and the binding registers but never fires.
+- **`paste_method = external_script`.** Handy's own macOS paste chord is
+  synthesised by `enigo`, whose key events are silently ignored by
+  Chromium/Electron targets (VS Code, Slack, Discord, and Orca's terminal —
+  nothing is pasted and Handy still logs success). AppleScript's System Events
+  sends the same chord with correct modifier tracking and works everywhere, so
+  `apply.sh` installs [`handy/paste.sh`](handy/paste.sh) to
+  `~/.local/bin/handy-paste` and points Handy at it.
+- **`clipboard_handling = copy_to_clipboard`** leaves the transcript on the
+  clipboard, so an insertion that fails can still be pasted by hand.
+- **`custom_words`** are matched fuzzily (Levenshtein + Soundex + n-grams), so a
+  word that merely *sounds* like everyday English will silently rewrite ordinary
+  dictation. Only collision-free terms belong in that list.
+
+The paste helper sends its chord via System Events, so Handy needs
+**Accessibility** permission for it to work.
+
 ## 🎨 Terminal aesthetic
 
 - **Terminal:** [Ghostty](https://ghostty.org)
-- **Font:** IoskeleyMono Nerd Font, 14pt
+- **Font:** JetBrainsMono Nerd Font, 14pt
 - **Theme:** Aizen Light / Monokai Pro (auto light/dark)
 - **Icon:** blueprint
 - **Quick terminal:** `Ctrl+Cmd+Shift+Alt+Space`
