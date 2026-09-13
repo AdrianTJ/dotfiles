@@ -41,19 +41,24 @@
 #     and it suits a workflow that already copies transcripts by hand. The
 #     original justification for this (a "two-pass read" inside Orca's Electron
 #     terminal) is now unproven — see the paste_method note below.
-#   paste_method = ctrl_v (the macOS default, pinned only to revert the earlier
-#   "direct" experiment — apply.sh merges keys and cannot remove a stale one).
-#     Do not set this to "direct" on macOS. Direct types through enigo, which
-#     posts CGEventKeyboardSetUnicodeString events in 20-character chunks with
-#     keycode 0, no key-up, and cleared flags. Upstream calls it a known-broken
-#     path for terminals and intends to remove it (cjpais/Handy#692: "just use
-#     cmd+v on macOS"), and a Handy fork disabled it on macOS because it causes
-#     CGEvent duplication in Ghostty. Worse, enigo's 20 ms inter-event pacing
-#     lives in its Drop impl, and Handy keeps its Enigo alive for the whole
-#     process lifetime, so that pacing never executes: events are posted back to
-#     back (measured 634 µs for a 74-character transcript) with no
-#     acknowledgement from the target. "Text pasted successfully in Xµs" is an
-#     enqueue metric, not a delivery metric.
+#   paste_method = external_script, with external_script_path installed by this
+#   script to ~/.local/bin/handy-paste
+#     Handy's own macOS chords go out through enigo, which posts key events with
+#     EMPTY modifier flags — in that crate `event_flags` is only ever read,
+#     never populated. Native AppKit apps paste anyway, because they take the
+#     modifier from the V event itself. Chromium/Electron targets build their
+#     tracked modifier state from the flag on the Cmd-down event, conclude
+#     "Command is up", and drop the chord silently: no paste, no error, and
+#     Handy still logs success. Measured here — three of four attempts logged
+#     "[reliable-paste] no read within timeout", i.e. nothing read the
+#     pasteboard at all. AppleScript's System Events sends a properly flagged
+#     chord and pastes into the same target every time, so delivery routes
+#     through paste.sh instead.
+#     Do NOT use "direct" on macOS either: it types via enigo's fast_text,
+#     posting CGEventKeyboardSetUnicodeString events in 20-character chunks
+#     with keycode 0 and no key-up, and its 20 ms inter-event pacing is stranded
+#     in a Drop impl that never runs. Upstream calls that path known-broken for
+#     terminals and intends to remove it (cjpais/Handy#692).
 #
 # Order matters: Handy holds the store in memory and rewrites the whole file
 # when it exits, so a running instance clobbers any external merge on quit.
@@ -91,12 +96,17 @@ if pgrep -f "Handy.app/Contents/MacOS/handy" >/dev/null 2>&1; then
     done
 fi
 
-python3 - "$store" "$fragment" <<'PY'
+# Install the paste helper the fragment's paste_method depends on.
+paste_script="$HOME/.local/bin/handy-paste"
+install -d "$HOME/.local/bin"
+install -m 755 "$here/paste.sh" "$paste_script"
+
+python3 - "$store" "$fragment" "$paste_script" <<'PY'
 import json
 import os
 import sys
 
-store_path, fragment_path = sys.argv[1], sys.argv[2]
+store_path, fragment_path, paste_script = sys.argv[1], sys.argv[2], sys.argv[3]
 
 with open(store_path) as fh:
     store = json.load(fh)
@@ -115,12 +125,17 @@ def merge(dst, src):
 settings = store.setdefault("settings", {})
 merge(settings, fragment)
 
+# Not in the fragment: it is a machine-local absolute path, so it is computed
+# here rather than hardcoded in a file meant to be portable.
+settings["external_script_path"] = paste_script
+
 tmp = f"{store_path}.tmp"
 with open(tmp, "w") as fh:
     json.dump(store, fh, indent=2)
 os.replace(tmp, store_path)
 
 print("  handy: applied " + ", ".join(sorted(fragment)))
+print("  handy: paste helper -> " + paste_script)
 PY
 
 # Handy reads the store at startup, so bring it back up (and only if it was).
