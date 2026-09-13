@@ -3,7 +3,7 @@
   "push_to_talk": false,
   "reliable_paste": true,
   "paste_delay_after_ms": 800,
-  "paste_method": "ctrl_v",
+  "paste_method": "external_script",
   "clipboard_handling": "copy_to_clipboard",
   "selected_language": "en",
   "selected_model": "handy-computer/parakeet-unified-en-0.6b-gguf/parakeet-unified-en-0.6b-Q8_0.gguf",
