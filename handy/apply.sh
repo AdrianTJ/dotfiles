@@ -13,17 +13,19 @@
 #     The default (handy_keys) tracks modifier state from flagsChanged events,
 #     which the Hyperkey app never emits — it ORs the modifiers into each key
 #     event instead. With handy_keys, Hyperkey+Space registers but never fires.
-#   reliable_paste = false, paste_delay_after_ms = 800
-#     Reliable paste publishes the transcript as a lazy promise on the macOS
-#     pasteboard instead of real data. Ghostty (and terminals generally) read a
-#     large payload in two passes: it pings the promise, then re-reads for the
-#     content. Handy tears the promise down after a ~200 ms quiet period, so the
-#     second read finds the previous clipboard and the transcript vanishes
-#     silently. Short text fits the first read, which is why the failure looked
-#     intermittent. The plain-text path materialises the data up front (the
-#     target reads ~106 ms after the chord), so 800 ms of margin before the
-#     unconditional restore is ample. Revisit if upstream fixes the two-pass
-#     read. paste_delay_ms stays at its 60 ms default and is not pinned here.
+#   reliable_paste = true, paste_delay_after_ms = 800
+#     Reliable paste publishes the transcript as a promise on the pasteboard
+#     and restores only once the target actually reads it, rather than on a
+#     fixed timer. That read is the only delivery evidence macOS offers, and the
+#     observability is the point: a failed insertion logs either "clipboard read
+#     Xms after chord" or "no read within timeout" instead of nothing at all.
+#     paste_delay_after_ms then governs only the fallback path, so 800 ms is
+#     margin rather than a race to win.
+#     History: disabled 2026-09-12 after a long transcript failed to paste into
+#     a terminal. That conclusion is now suspect — the read receipt we blamed
+#     may have come from a different application entirely, since a failing
+#     burst was later traced to a non-target window. Re-enabled because flying
+#     blind cost more than the suspected race.
 #   selected_model = ...Q8_0.gguf
 #     Parakeet Unified EN 0.6B. Handy resolves it from the shared Hugging Face
 #     cache, so there is a single copy of the model on disk.
@@ -34,32 +36,24 @@
 #     RAG ate "rag"). Only collision-free terms are tracked; adding a word that
 #     sounds like common speech will corrupt normal dictation.
 #   clipboard_handling = copy_to_clipboard
-#     Orca's terminal is Ghostty's core embedded in an Electron renderer, and
-#     it reads the clipboard asynchronously in JS (its own keydown handler
-#     suppresses the native paste event first). The default dont_modify lets
-#     Handy restore — or clear — the clipboard on an 800 ms timer, so a long
-#     transcript loses the race against that async read: the read comes back
-#     empty and nothing is pasted, with no error anywhere. Measured symptom was
-#     only long dictations, because a longer string takes longer to cross
-#     Electron's IPC boundary. Leaving the transcript on the clipboard means a
-#     late read still finds it. The cost is that Handy no longer restores the
-#     previous clipboard contents after dictating — which suits a
-#     dictation-heavy workflow that already copies transcripts by hand.
-#   paste_method = direct (type the text, do not use the clipboard)
-#     Keeping the transcript on the clipboard was not enough on its own: the
-#     Chromium clipboard read also refuses when it cannot associate the read
-#     with a real paste gesture. Blink's clipboard_promise.cc grants an implicit
-#     read only while a paste event is being dispatched (Orca suppresses the
-#     native paste first) and otherwise requires transient user activation,
-#     which expires ~5 s in — and separately rejects the read outright with
-#     "Clipboard contents changed since paste event started" if anything writes
-#     the clipboard mid-read. Every one of those failures is silent: Orca guards
-#     the paste on a truthy read and drops the error, so nothing appears and
-#     nothing is logged. Typing the characters sidesteps the clipboard APIs
-#     entirely, which is the only fix that does not depend on Orca changing.
-#     Slower than a paste for long text, and it is the setting to revisit if
-#     Orca ever reads the clipboard via Electron's main process (which has no
-#     permission gate and no activation requirement).
+#     Handy otherwise restores the previous clipboard after dictating. Leaving
+#     the transcript there instead means a late or failed read still finds it,
+#     and it suits a workflow that already copies transcripts by hand. The
+#     original justification for this (a "two-pass read" inside Orca's Electron
+#     terminal) is now unproven — see the paste_method note below.
+#   paste_method = ctrl_v (the macOS default, pinned only to revert the earlier
+#   "direct" experiment — apply.sh merges keys and cannot remove a stale one).
+#     Do not set this to "direct" on macOS. Direct types through enigo, which
+#     posts CGEventKeyboardSetUnicodeString events in 20-character chunks with
+#     keycode 0, no key-up, and cleared flags. Upstream calls it a known-broken
+#     path for terminals and intends to remove it (cjpais/Handy#692: "just use
+#     cmd+v on macOS"), and a Handy fork disabled it on macOS because it causes
+#     CGEvent duplication in Ghostty. Worse, enigo's 20 ms inter-event pacing
+#     lives in its Drop impl, and Handy keeps its Enigo alive for the whole
+#     process lifetime, so that pacing never executes: events are posted back to
+#     back (measured 634 µs for a 74-character transcript) with no
+#     acknowledgement from the target. "Text pasted successfully in Xµs" is an
+#     enqueue metric, not a delivery metric.
 #
 # Order matters: Handy holds the store in memory and rewrites the whole file
 # when it exits, so a running instance clobbers any external merge on quit.
