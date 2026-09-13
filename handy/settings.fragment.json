@@ -1,9 +1,9 @@
 {
   "keyboard_implementation": "tauri",
   "push_to_talk": false,
-  "reliable_paste": false,
+  "reliable_paste": true,
   "paste_delay_after_ms": 800,
-  "paste_method": "direct",
+  "paste_method": "ctrl_v",
   "clipboard_handling": "copy_to_clipboard",
   "selected_language": "en",
   "selected_model": "handy-computer/parakeet-unified-en-0.6b-gguf/parakeet-unified-en-0.6b-Q8_0.gguf",
