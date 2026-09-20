@@ -63,5 +63,14 @@ cask "typora"
 
 # --- API client ---
 cask "bruno"                     # open-source API client (replaces Postman)
+
+# --- Local AI ---
+cask "lm-studio"                 # run local LLMs
+cask "stablyai/orca/orca"        # plotly chart images; official cask is disabled,
+                                 # third-party tap is the only working source
+
+# --- Media & personal ---
+cask "discord"
+cask "netnewswire"               # RSS reader
 cask "rectangle"                 # window management
 cask "stats"                     # menu bar system stats
