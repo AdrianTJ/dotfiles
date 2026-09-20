@@ -55,5 +55,13 @@ cask "cmux"                      # Ghostty-based terminal for parallel AI agents
 cask "google-gemini"             # Gemini desktop app
 cask "chatgpt"                   # ChatGPT desktop app
 cask "opencode-desktop"          # desktop client for the opencode CLI
+
+# --- Editors & notes ---
+cask "zed"
+cask "obsidian"
+cask "typora"
+
+# --- API client ---
+cask "bruno"                     # open-source API client (replaces Postman)
 cask "rectangle"                 # window management
 cask "stats"                     # menu bar system stats
