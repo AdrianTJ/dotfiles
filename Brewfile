@@ -72,5 +72,11 @@ cask "stablyai/orca/orca"        # plotly chart images; official cask is disable
 # --- Media & personal ---
 cask "discord"
 cask "netnewswire"               # RSS reader
+
+# --- Utilities ---
+cask "homebrew-app"
+cask "appcleaner"
+cask "keka"                      # file archiver
+cask "google-chrome"
 cask "rectangle"                 # window management
 cask "stats"                     # menu bar system stats
