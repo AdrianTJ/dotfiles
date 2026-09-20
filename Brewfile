@@ -45,5 +45,15 @@ cask "font-jetbrains-mono-nerd-font"
 # and no Hyperkey has an unusable hotkey.
 cask "handy"                     # local dictation (see handy/apply.sh)
 cask "hyperkey"                  # Caps Lock -> all modifiers; provides the hotkey
+
+# --- Coding agents, GUI side ---
+cask "claude"                    # Claude desktop app
+cask "claude-code"               # Claude Code CLI
+cask "codex"                     # OpenAI Codex CLI
+cask "codexbar"                  # menu bar usage monitor for Codex/Claude
+cask "cmux"                      # Ghostty-based terminal for parallel AI agents
+cask "google-gemini"             # Gemini desktop app
+cask "chatgpt"                   # ChatGPT desktop app
+cask "opencode-desktop"          # desktop client for the opencode CLI
 cask "rectangle"                 # window management
 cask "stats"                     # menu bar system stats
