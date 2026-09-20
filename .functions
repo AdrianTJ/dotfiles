@@ -73,6 +73,48 @@ gclone() {
     git clone "$url" && cd -- "$(basename "${url%.git}")"
 }
 
+# sandcastle: mosh in + attach session (abduco: zero terminal emulation,
+# everything behaves native; detach with Ctrl+\).
+# --no-init: mosh otherwise puts the outer terminal in ALTERNATE SCREEN mode,
+# where Ghostty deliberately converts wheel scrolls to Up/Down arrows
+# (mosh#774, ghostty#7630) — that's the history-cycling. --no-init keeps the
+# primary screen so the wheel scrolls the viewport natively. Caveat from mosh
+# docs: scrollback can occasionally miss redrawn lines; tmux stays the
+# perfect-scrollback option. Verified flag exists (mosh --help), 2026-09-05.
+# Session sharing: bare `sand` attaches session "dev" — run it in two windows
+# and they mirror each other (shared input!). Pass a name for a private one.
+# Default (no arg) spawns the next free devN (dev1, dev2, …): one ssh
+# round-trip lists sessions, purges terminated ones, picks the lowest free
+# number. The session name always prints before mosh takes the screen.
+#
+# Connection details live in an untracked per-machine file (~/.config/sandcastle.env)
+# so this public repo never names the host or user:
+#   SANDCASTLE_HOST="user@host"
+#   SANDCASTLE_ABUCO="/home/<user>/.local/bin/abduco"
+sand() {
+    local env_file="$HOME/.config/sandcastle.env"
+    [[ -f "$env_file" ]] && source "$env_file"
+    if [[ -z "${SANDCASTLE_HOST:-}" || -z "${SANDCASTLE_ABUCO:-}" ]]; then
+        printf 'sand: set SANDCASTLE_HOST and SANDCASTLE_ABUCO in %s\n' "$env_file" >&2
+        return 1
+    fi
+    local host="$SANDCASTLE_HOST" abduco="$SANDCASTLE_ABUCO"
+    local name="${1:-}"
+    if [[ -z "$name" ]]; then
+        local existing
+        existing=$(ssh -o ConnectTimeout=10 "$host" \
+            "$abduco | awk '/^\+/ {print \$(NF-1), \$NF}' | while read -r pid nm; do case \$pid in ''|*[!0-9]*) continue;; esac; kill \"\$pid\" 2>/dev/null; rm -f \"\$HOME/.abduco/\${nm}@*\"; done; $abduco" 2>/dev/null) \
+            || { echo "sand: cannot reach $host"; return 1; }
+        local n=1
+        while printf '%s\n' "$existing" | grep -qE "(^|[^0-9A-Za-z_])dev${n}([@]|$)"; do
+            n=$((n + 1))
+        done
+        name="dev$n"
+    fi
+    printf '\n=== sandcastle session: %s ===\n\n' "$name"
+    mosh --no-init "$host" -- "$abduco" -A "$name" /usr/bin/zsh
+}
+
 # Extract just about any archive without remembering the flags.
 extract() {
     [[ -f "$1" ]] || { printf 'extract: "%s" is not a file\n' "$1" >&2; return 1; }

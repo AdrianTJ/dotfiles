@@ -1,8 +1,8 @@
 # ~/.zshrc
 #
 # Everything optional is guarded, so this file stays quiet on a machine where a
-# given tool isn't installed yet. Install the extras with:
-#   brew install starship fzf eza bat zsh-autosuggestions zsh-syntax-highlighting
+# given tool isn't installed yet. Install everything with:
+#   ./install.sh          (or: brew bundle --file=~/dotfiles/Brewfile)
 
 # ---------------------------------------------------------------------------
 # History
@@ -40,6 +40,9 @@ BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
 # ---------------------------------------------------------------------------
 export PATH="$HOME/.local/bin:$PATH"
 [[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"   # rust/rustup
+[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$HOME/.lmstudio/bin:$PATH"          # LM Studio CLI (lms)
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+[[ -d "$HOME/.antigravity-ide/antigravity-ide/bin" ]] && export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
 
 # mise — one manager for python / node / go / etc. (https://mise.jdx.dev)
 # Preferred over juggling pyenv + nvm + gvm separately. Activate only if present.
