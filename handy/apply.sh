@@ -29,12 +29,14 @@
 #   selected_model = ...Q8_0.gguf
 #     Parakeet Unified EN 0.6B. Handy resolves it from the shared Hugging Face
 #     cache, so there is a single copy of the model on disk.
-#   custom_words = [...]
-#     Handy matches these fuzzily against the transcript with a Soundex
-#     phonetic boost, so an entry that merely *sounds* like everyday English
-#     silently rewrites ordinary dictation (ONNX ate "once", OpenAI ate "open",
-#     RAG ate "rag"). Only collision-free terms are tracked; adding a word that
-#     sounds like common speech will corrupt normal dictation.
+#   custom_words = null   (retired 2026-09-13)
+#     The dictionary is gone rather than curated. Handy matches these fuzzily
+#     with a Soundex phonetic boost, so any term that sounds like everyday
+#     English silently rewrites ordinary dictation (ONNX ate "once", OpenAI ate
+#     "open", RAG ate "rag", Perplexity ate "a problem"). Tracking words was
+#     not worth that corruption. A null value in the fragment means "delete this
+#     key from the store" (see merge() below), so re-running apply.sh converges
+#     machines that still carry a populated list.
 #   clipboard_handling = copy_to_clipboard
 #     Handy otherwise restores the previous clipboard after dictating. Leaving
 #     the transcript there instead means a late or failed read still finds it,
@@ -116,7 +118,9 @@ with open(fragment_path) as fh:
 
 def merge(dst, src):
     for key, value in src.items():
-        if isinstance(value, dict) and isinstance(dst.get(key), dict):
+        if value is None:
+            dst.pop(key, None)
+        elif isinstance(value, dict) and isinstance(dst.get(key), dict):
             merge(dst[key], value)
         else:
             dst[key] = value

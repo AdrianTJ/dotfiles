@@ -16,6 +16,18 @@ brew "mosh"                     # roaming SSH for flaky connections
 brew "uv"                       # Python project/venv manager
 brew "tailscale"                # VPN
 
+# --- Languages & runtimes ---
+brew "ffmpeg"                   # audio/video conversion
+brew "go"
+brew "python@3.14"              # system Python (uv covers per-project versions)
+brew "r"
+
+# --- Coding agents ---
+brew "pi-coding-agent"
+brew "can1357/tap/omp"          # coding agent with the IDE wired in (third-party tap)
+brew "opencode"
+brew "container"                # Apple Containers — Linux containers via lightweight VMs
+
 # --- Runtime manager (Python / Node / Go / ...) ---
 brew "mise"
 brew "gh"                        # git credential helper (see .gitconfig)
@@ -33,5 +45,38 @@ cask "font-jetbrains-mono-nerd-font"
 # and no Hyperkey has an unusable hotkey.
 cask "handy"                     # local dictation (see handy/apply.sh)
 cask "hyperkey"                  # Caps Lock -> all modifiers; provides the hotkey
+
+# --- Coding agents, GUI side ---
+cask "claude"                    # Claude desktop app
+cask "claude-code"               # Claude Code CLI
+cask "codex"                     # OpenAI Codex CLI
+cask "codexbar"                  # menu bar usage monitor for Codex/Claude
+cask "cmux"                      # Ghostty-based terminal for parallel AI agents
+cask "google-gemini"             # Gemini desktop app
+cask "chatgpt"                   # ChatGPT desktop app
+cask "opencode-desktop"          # desktop client for the opencode CLI
+
+# --- Editors & notes ---
+cask "zed"
+cask "obsidian"
+cask "typora"
+
+# --- API client ---
+cask "bruno"                     # open-source API client (replaces Postman)
+
+# --- Local AI ---
+cask "lm-studio"                 # run local LLMs
+cask "stablyai/orca/orca"        # plotly chart images; official cask is disabled,
+                                 # third-party tap is the only working source
+
+# --- Media & personal ---
+cask "discord"
+cask "netnewswire"               # RSS reader
+
+# --- Utilities ---
+cask "homebrew-app"
+cask "appcleaner"
+cask "keka"                      # file archiver
+cask "google-chrome"
 cask "rectangle"                 # window management
 cask "stats"                     # menu bar system stats
