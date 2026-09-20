@@ -2,7 +2,7 @@
 #
 # Everything optional is guarded, so this file stays quiet on a machine where a
 # given tool isn't installed yet. Install the extras with:
-#   brew install starship fzf zoxide eza bat zsh-autosuggestions zsh-syntax-highlighting
+#   brew install starship fzf eza bat zsh-autosuggestions zsh-syntax-highlighting
 
 # ---------------------------------------------------------------------------
 # History
@@ -50,9 +50,6 @@ command -v mise >/dev/null && eval "$(mise activate zsh)"
 # ---------------------------------------------------------------------------
 # fzf — Ctrl-R fuzzy history, Ctrl-T files, Alt-C cd. Needs fzf >= 0.48.
 command -v fzf >/dev/null && source <(fzf --zsh)
-
-# zoxide — frecency-based cd. `z foo` jumps to the best-matching dir.
-command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 # ---------------------------------------------------------------------------
 # Aliases (only ls -> eza; core tools like cat/rm are left untouched on purpose)

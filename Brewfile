@@ -5,7 +5,6 @@
 # --- Shell experience ---
 brew "starship"                 # prompt
 brew "fzf"                      # fuzzy finder (Ctrl-R / Ctrl-T / Alt-C)
-brew "zoxide"                   # smarter cd
 brew "eza"                      # modern ls
 brew "bat"                      # pretty cat (aliased as `catp`)
 brew "zsh-autosuggestions"

@@ -61,7 +61,7 @@ If you'd rather not run the script, the tools are:
 ```bash
 brew bundle --file=Brewfile
 # or, minimally:
-brew install starship fzf zoxide eza bat mise gh \
+brew install starship fzf eza bat mise gh \
              zsh-autosuggestions zsh-syntax-highlighting bc
 brew install --cask ghostty font-jetbrains-mono-nerd-font \
                     handy hyperkey rectangle stats
@@ -111,7 +111,6 @@ conflict markers.
   case-insensitive completion.
 - **Plugins** — `zsh-autosuggestions` + `zsh-syntax-highlighting`.
 - **[fzf](https://github.com/junegunn/fzf)** — `Ctrl-R` history, `Ctrl-T` files, `Alt-C` cd.
-- **[zoxide](https://github.com/ajeetdsouza/zoxide)** — `z <partial>` jumps to your most-used matching dir.
 - **[eza](https://github.com/eza-community/eza)** — `ls`/`ll`/`lt` (tree) with git awareness.
 - **[starship](https://starship.rs)** — the prompt.
 - **[mise](https://mise.jdx.dev)** — one runtime manager for Python/Node/Go/etc.
