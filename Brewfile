@@ -16,6 +16,18 @@ brew "mosh"                     # roaming SSH for flaky connections
 brew "uv"                       # Python project/venv manager
 brew "tailscale"                # VPN
 
+# --- Languages & runtimes ---
+brew "ffmpeg"                   # audio/video conversion
+brew "go"
+brew "python@3.14"              # system Python (uv covers per-project versions)
+brew "r"
+
+# --- Coding agents ---
+brew "pi-coding-agent"
+brew "can1357/tap/omp"          # coding agent with the IDE wired in (third-party tap)
+brew "opencode"
+brew "container"                # Apple Containers — Linux containers via lightweight VMs
+
 # --- Runtime manager (Python / Node / Go / ...) ---
 brew "mise"
 brew "gh"                        # git credential helper (see .gitconfig)
