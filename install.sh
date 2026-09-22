@@ -116,9 +116,13 @@ if [[ -f "$LOCAL_GITCONFIG" ]]; then
 else
     cat > "$LOCAL_GITCONFIG" <<'EOF'
 # Machine-local git identity. Not tracked.
+# Name: your real name. Email: prefer GitHub's noreply address so commits
+# attribute to you without publishing a personal inbox:
+#   <numeric-id>+<username>@users.noreply.github.com
+# (visible in any commit you've pushed; or GitHub -> Settings -> Emails).
 [user]
-    name = Adrian TJ
-    email = adrian.tame.jacobo@gmail.com
+    name = YOUR NAME
+    email = YOU@users.noreply.github.com
     # signingkey = <ssh-or-gpg-key>
 EOF
     ok "Created $LOCAL_GITCONFIG"
