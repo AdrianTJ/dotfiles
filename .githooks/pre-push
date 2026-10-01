@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Run this repo's checks before a push leaves the machine; CI runs the same script.
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+exec "$root/check.sh"

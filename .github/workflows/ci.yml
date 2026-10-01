@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck zsh jq
+
+      - name: Install tools (macOS)
+        if: runner.os == 'macOS'
+        run: brew install shellcheck jq
+
+      # Same script the pre-push hook runs, so a local pass means a green run.
+      - name: checks
+        run: bash check.sh
+
+      # macOS only: the Brewfile must parse.
+      - name: Brewfile parses
+        if: runner.os == 'macOS'
+        run: brew bundle list --all --file=Brewfile >/dev/null
