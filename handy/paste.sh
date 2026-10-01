@@ -18,7 +18,7 @@
 #
 # AppleScript's System Events synthesises the chord through the Accessibility
 # API with correct modifier tracking, which every target honours — verified by
-# hand into Orca's terminal before this script existed.
+# hand into an Electron terminal before this script existed.
 #
 # Note: this replaces the clipboard contents with the transcript and does not
 # restore what was there before, which matches clipboard_handling =

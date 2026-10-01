@@ -70,6 +70,19 @@ brew install --cask ghostty font-jetbrains-mono-nerd-font \
 Nothing here breaks if a tool is missing — you'll just get the plain version of
 that feature until you install it.
 
+## ✅ Checks
+
+```bash
+git config core.hooksPath .githooks   # run the checks before every push
+bash check.sh                         # or run them by hand
+```
+
+`check.sh` runs shellcheck, bash and zsh syntax checks, JSON validation, a scan
+for credential-looking tracked files, and an install smoke test in a throwaway
+`$HOME` (links resolve, a second run is a no-op, unknown flags are rejected).
+It needs `shellcheck` and `jq` (both in the Brewfile). CI runs the same script on
+Linux and macOS, and on macOS also checks that the Brewfile parses.
+
 ## ✨ Shell functions
 
 Defined in [`.functions`](.functions):
@@ -139,7 +152,7 @@ in its header. In brief, the non-obvious ones:
   Hyperkey and the binding registers but never fires.
 - **`paste_method = external_script`.** Handy's own macOS paste chord is
   synthesised by `enigo`, whose key events are silently ignored by
-  Chromium/Electron targets (VS Code, Slack, Discord, and Orca's terminal —
+  Chromium/Electron targets (VS Code, Slack, Discord, Electron-based terminals —
   nothing is pasted and Handy still logs success). AppleScript's System Events
   sends the same chord with correct modifier tracking and works everywhere, so
   `apply.sh` installs [`handy/paste.sh`](handy/paste.sh) to

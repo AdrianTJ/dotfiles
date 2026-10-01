@@ -41,7 +41,7 @@
 #     Handy otherwise restores the previous clipboard after dictating. Leaving
 #     the transcript there instead means a late or failed read still finds it,
 #     and it suits a workflow that already copies transcripts by hand. The
-#     original justification for this (a "two-pass read" inside Orca's Electron
+#     original justification for this (a "two-pass read" inside an Electron
 #     terminal) is now unproven — see the paste_method note below.
 #   paste_method = external_script, with external_script_path installed by this
 #   script to ~/.local/bin/handy-paste

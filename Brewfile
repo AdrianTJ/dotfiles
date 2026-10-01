@@ -31,6 +31,8 @@ brew "container"                # Apple Containers — Linux containers via ligh
 # --- Runtime manager (Python / Node / Go / ...) ---
 brew "mise"
 brew "gh"                        # git credential helper (see .gitconfig)
+brew "shellcheck"                # lints install.sh and handy/*.sh (see check.sh)
+brew "jq"                        # JSON checks in check.sh
 
 # --- Terminal + font (font fixes Nerd Font glyphs in the prompt) ---
 cask "ghostty"
@@ -51,7 +53,6 @@ cask "claude"                    # Claude desktop app
 cask "claude-code"               # Claude Code CLI
 cask "codex"                     # OpenAI Codex CLI
 cask "codexbar"                  # menu bar usage monitor for Codex/Claude
-cask "cmux"                      # Ghostty-based terminal for parallel AI agents
 cask "google-gemini"             # Gemini desktop app
 cask "chatgpt"                   # ChatGPT desktop app
 cask "opencode-desktop"          # desktop client for the opencode CLI
@@ -66,8 +67,6 @@ cask "bruno"                     # open-source API client (replaces Postman)
 
 # --- Local AI ---
 cask "lm-studio"                 # run local LLMs
-cask "stablyai/orca/orca"        # plotly chart images; official cask is disabled,
-                                 # third-party tap is the only working source
 
 # --- Media & personal ---
 cask "discord"
