@@ -35,12 +35,12 @@ fi
 echo "== install smoke test (throwaway HOME)"
 smoke_home="$(mktemp -d)"
 trap 'rm -rf "$smoke_home"' EXIT
-HOME="$smoke_home" ./install.sh --no-brew >/dev/null
+HOME="$smoke_home" XDG_CONFIG_HOME="$smoke_home/.config" ./install.sh --no-brew >/dev/null
 for f in .zshrc .gitconfig .gitignore_global .editorconfig .config/starship.toml .local/bin/.functions; do
   [[ -L "$smoke_home/$f" && -e "$smoke_home/$f" ]] || { echo "not linked or dangling: ~/$f" >&2; exit 1; }
 done
 [[ -f "$smoke_home/.gitconfig.local" ]] || { echo "missing ~/.gitconfig.local" >&2; exit 1; }
-if HOME="$smoke_home" ./install.sh --no-brew 2>&1 | grep -q 'backed up'; then
+if HOME="$smoke_home" XDG_CONFIG_HOME="$smoke_home/.config" ./install.sh --no-brew 2>&1 | grep -q 'backed up'; then
   echo "second install run was not idempotent" >&2
   exit 1
 fi
