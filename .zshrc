@@ -17,23 +17,34 @@ setopt HIST_REDUCE_BLANKS
 setopt EXTENDED_HISTORY       # record timestamps
 
 # ---------------------------------------------------------------------------
-# Completions & navigation
+# Navigation & completion settings (set before Oh My Zsh runs compinit)
 # ---------------------------------------------------------------------------
-autoload -Uz compinit && compinit
 setopt AUTO_CD                # type a directory name to cd into it
 setopt AUTO_PUSHD             # cd maintains a directory stack (cd -<TAB>)
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'   # case-insensitive
 
 # ---------------------------------------------------------------------------
-# Zsh plugins (Homebrew). Order matters: autosuggestions before highlighting.
+# Oh My Zsh: framework, git plugin, and the candy prompt theme.
+# install.sh clones it to ~/.oh-my-zsh.
+# ---------------------------------------------------------------------------
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="candy"
+plugins=(git)
+
+if [[ -s "$ZSH/oh-my-zsh.sh" ]]; then
+    source "$ZSH/oh-my-zsh.sh"          # also runs compinit
+else
+    autoload -Uz compinit && compinit   # no Oh My Zsh yet: plain completions
+fi
+
+# ---------------------------------------------------------------------------
+# Zsh plugins (Homebrew). Autosuggestions loads here. Syntax highlighting must
+# be the last thing sourced, so it lives at the bottom of this file.
 # ---------------------------------------------------------------------------
 BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
 
 [[ -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] \
     && source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
-[[ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] \
-    && source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # ---------------------------------------------------------------------------
 # PATH & runtime version managers
@@ -65,11 +76,12 @@ fi
 command -v bat >/dev/null && alias catp='bat --paging=never'   # pretty cat, opt-in
 
 # ---------------------------------------------------------------------------
-# Prompt (keep last so it wins)
-# ---------------------------------------------------------------------------
-command -v starship >/dev/null && eval "$(starship init zsh)"
-
-# ---------------------------------------------------------------------------
 # Custom shell functions
 # ---------------------------------------------------------------------------
 source ~/.local/bin/.functions
+
+# ---------------------------------------------------------------------------
+# Syntax highlighting (keep last: it must wrap every widget and keybinding)
+# ---------------------------------------------------------------------------
+[[ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] \
+    && source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

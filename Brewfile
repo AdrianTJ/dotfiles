@@ -3,7 +3,7 @@
 # (install.sh does this for you.)
 
 # --- Shell experience ---
-brew "starship"                 # prompt
+# Prompt and theme come from Oh My Zsh, which install.sh clones (not a formula).
 brew "fzf"                      # fuzzy finder (Ctrl-R / Ctrl-T / Alt-C)
 brew "eza"                      # modern ls
 brew "bat"                      # pretty cat (aliased as `catp`)
@@ -56,6 +56,8 @@ cask "codexbar"                  # menu bar usage monitor for Codex/Claude
 cask "google-gemini"             # Gemini desktop app
 cask "chatgpt"                   # ChatGPT desktop app
 cask "opencode-desktop"          # desktop client for the opencode CLI
+cask "bb"                        # IDE for running and orchestrating coding agents
+cask "cmux"                      # Ghostty-based terminal with tabs for coding agents
 
 # --- Editors & notes ---
 cask "zed"

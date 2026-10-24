@@ -54,6 +54,19 @@ if [[ "$WITH_BREW" -eq 1 ]]; then
     else
         warn "Skipping package install (no brew)."
     fi
+
+    # Oh My Zsh: the framework behind the prompt (theme: candy). Not a Homebrew
+    # formula, so it is cloned here. It sits inside the package step, so
+    # --no-brew (and the smoke test) stays offline.
+    if [[ -s "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]]; then
+        ok "Oh My Zsh already installed"
+    elif command -v git >/dev/null 2>&1; then
+        info "Cloning Oh My Zsh into ~/.oh-my-zsh…"
+        git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+        ok "Oh My Zsh installed"
+    else
+        warn "Skipping Oh My Zsh (no git)."
+    fi
 else
     bold "Skipping package install (--no-brew)"
 fi
@@ -95,7 +108,6 @@ link ".functions"        "$HOME/.local/bin/.functions"
 link ".gitconfig"        "$HOME/.gitconfig"
 link ".gitignore_global" "$HOME/.gitignore_global"
 link ".editorconfig"     "$HOME/.editorconfig"
-link "starship.toml"     "${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
 link "ghostty_config"    "$GHOSTTY_DEST"
 
 # ---------------------------------------------------------------------------
