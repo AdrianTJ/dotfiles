@@ -16,7 +16,6 @@ fresh Mac before you've finished `brew install`-ing everything.
 | [`.gitconfig`](.gitconfig) | `~/.gitconfig` | Git defaults + aliases (identity lives in `~/.gitconfig.local`) |
 | [`.gitignore_global`](.gitignore_global) | `~/.gitignore_global` | OS/editor/build junk ignored in **every** repo |
 | [`.editorconfig`](.editorconfig) | `~/.editorconfig` | Consistent whitespace across editors & languages |
-| [`starship.toml`](starship.toml) | `~/.config/starship.toml` | Compact, language-aware prompt |
 | [`ghostty_config`](ghostty_config) | `~/Library/Application Support/com.mitchellh.ghostty/config` | Terminal emulator config |
 | [`handy/`](handy) | `~/Library/Application Support/com.pais.handy/settings_store.json` (applied, not linked) | Handy dictation: Hyperkey+Space, Parakeet Unified EN model, paste helper |
 | [`install.sh`](install.sh) | — | One-shot installer (deps, symlinks, app config) |
@@ -32,8 +31,7 @@ One command from the repo directory:
 
 It will:
 
-1. Install Homebrew (if missing) and everything in the [`Brewfile`](Brewfile)
-   via `brew bundle` — CLI tools, `gh`, Ghostty, and the JetBrainsMono Nerd Font.
+1. Install Homebrew (if missing) and everything in the [`Brewfile`](Brewfile) via `brew bundle` — CLI tools, `gh`, Ghostty, and the JetBrainsMono Nerd Font — then clone Oh My Zsh into `~/.oh-my-zsh` for the prompt.
 2. Symlink every config into place (backing up any existing real file to
    `<file>.bak` first).
 3. Apply the config that can't be symlinked — Handy's dictation settings plus
@@ -61,8 +59,9 @@ If you'd rather not run the script, the tools are:
 ```bash
 brew bundle --file=Brewfile
 # or, minimally:
-brew install starship fzf eza bat mise gh \
+brew install fzf eza bat mise gh \
              zsh-autosuggestions zsh-syntax-highlighting bc
+git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 brew install --cask ghostty font-jetbrains-mono-nerd-font \
                     handy hyperkey rectangle stats
 ```
@@ -125,7 +124,7 @@ conflict markers.
 - **Plugins** — `zsh-autosuggestions` + `zsh-syntax-highlighting`.
 - **[fzf](https://github.com/junegunn/fzf)** — `Ctrl-R` history, `Ctrl-T` files, `Alt-C` cd.
 - **[eza](https://github.com/eza-community/eza)** — `ls`/`ll`/`lt` (tree) with git awareness.
-- **[starship](https://starship.rs)** — the prompt.
+- **[Oh My Zsh](https://ohmyzsh.sh)** — the prompt (`candy` theme) and the `git` plugin.
 - **[mise](https://mise.jdx.dev)** — one runtime manager for Python/Node/Go/etc.
 
 Core tools (`cat`, `rm`) are intentionally left untouched — `bat` is available
