@@ -169,4 +169,4 @@ The paste helper sends its chord via System Events, so Handy needs
 - **Font:** JetBrainsMono Nerd Font, 14pt
 - **Theme:** Aizen Light / Monokai Pro (auto light/dark)
 - **Icon:** blueprint
-- **Quick terminal:** `Ctrl+Cmd+Shift+Alt+Space`
+- **Quick terminal:** `Ctrl+Cmd+Shift+Alt+A` (Hyper+A; Hyper+Space belongs to Handy dictation)

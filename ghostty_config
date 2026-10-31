@@ -2,7 +2,7 @@
 # Docs: https://ghostty.org/docs/config  (`ghostty +show-config --default --docs`)
 
 # keybinds
-keybind = global:ctrl+cmd+shift+alt+space=toggle_quick_terminal
+keybind = global:ctrl+cmd+shift+alt+a=toggle_quick_terminal
 
 # fonts
 font-family = JetBrainsMono Nerd Font
