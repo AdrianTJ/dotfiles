@@ -4,7 +4,6 @@
 
 # --- Shell experience ---
 # Prompt and theme come from Oh My Zsh, which install.sh clones (not a formula).
-brew "fzf"                      # fuzzy finder (Ctrl-R / Ctrl-T / Alt-C)
 brew "eza"                      # modern ls
 brew "bat"                      # pretty cat (aliased as `catp`)
 brew "zsh-autosuggestions"
@@ -24,12 +23,9 @@ brew "r"
 
 # --- Coding agents ---
 brew "pi-coding-agent"
-brew "can1357/tap/omp"          # coding agent with the IDE wired in (third-party tap)
-brew "opencode"
 brew "container"                # Apple Containers — Linux containers via lightweight VMs
 
-# --- Runtime manager (Python / Node / Go / ...) ---
-brew "mise"
+# --- Repo tooling ---
 brew "gh"                        # git credential helper (see .gitconfig)
 brew "shellcheck"                # lints install.sh and handy/*.sh (see check.sh)
 brew "jq"                        # JSON checks in check.sh
@@ -50,17 +46,11 @@ cask "hyperkey"                  # Caps Lock -> all modifiers; provides the hotk
 
 # --- Coding agents, GUI side ---
 cask "claude"                    # Claude desktop app
-cask "claude-code"               # Claude Code CLI
 cask "codex"                     # OpenAI Codex CLI
 cask "codexbar"                  # menu bar usage monitor for Codex/Claude
-cask "google-gemini"             # Gemini desktop app
 cask "chatgpt"                   # ChatGPT desktop app
-cask "opencode-desktop"          # desktop client for the opencode CLI
-cask "bb"                        # IDE for running and orchestrating coding agents
-cask "cmux"                      # Ghostty-based terminal with tabs for coding agents
 
 # --- Editors & notes ---
-cask "zed"
 cask "obsidian"
 cask "typora"
 
@@ -68,11 +58,8 @@ cask "typora"
 cask "bruno"                     # open-source API client (replaces Postman)
 
 # --- Local AI ---
-cask "lm-studio"                 # run local LLMs
 
 # --- Media & personal ---
-cask "discord"
-cask "netnewswire"               # RSS reader
 
 # --- Utilities ---
 cask "homebrew-app"
