@@ -48,6 +48,7 @@ cask "hyperkey"                  # Caps Lock -> all modifiers; provides the hotk
 cask "claude"                    # Claude desktop app
 cask "codex"                     # OpenAI Codex CLI
 cask "codexbar"                  # menu bar usage monitor for Codex/Claude
+cask "paseo"                     # desktop frontend for AI coding agents
 cask "chatgpt"                   # ChatGPT desktop app
 
 # --- Editors & notes ---
