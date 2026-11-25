@@ -24,12 +24,12 @@ setopt AUTO_PUSHD             # cd maintains a directory stack (cd -<TAB>)
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'   # case-insensitive
 
 # ---------------------------------------------------------------------------
-# Oh My Zsh: framework, git plugin, and the candy prompt theme.
+# Oh My Zsh: framework and the candy prompt theme, no plugins.
 # install.sh clones it to ~/.oh-my-zsh.
 # ---------------------------------------------------------------------------
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="candy"
-plugins=(git)
+plugins=()
 
 if [[ -s "$ZSH/oh-my-zsh.sh" ]]; then
     source "$ZSH/oh-my-zsh.sh"          # also runs compinit
@@ -47,23 +47,9 @@ BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
     && source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # ---------------------------------------------------------------------------
-# PATH & runtime version managers
+# PATH
 # ---------------------------------------------------------------------------
 export PATH="$HOME/.local/bin:$PATH"
-[[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"   # rust/rustup
-[[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$HOME/.lmstudio/bin:$PATH"          # LM Studio CLI (lms)
-[[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-[[ -d "$HOME/.antigravity-ide/antigravity-ide/bin" ]] && export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
-
-# mise — one manager for python / node / go / etc. (https://mise.jdx.dev)
-# Preferred over juggling pyenv + nvm + gvm separately. Activate only if present.
-command -v mise >/dev/null && eval "$(mise activate zsh)"
-
-# ---------------------------------------------------------------------------
-# Tools (each activated only if present)
-# ---------------------------------------------------------------------------
-# fzf — Ctrl-R fuzzy history, Ctrl-T files, Alt-C cd. Needs fzf >= 0.48.
-command -v fzf >/dev/null && source <(fzf --zsh)
 
 # ---------------------------------------------------------------------------
 # Aliases (only ls -> eza; core tools like cat/rm are left untouched on purpose)

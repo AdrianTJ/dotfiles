@@ -13,7 +13,7 @@ fresh Mac before you've finished `brew install`-ing everything.
 | :--- | :--- | :--- |
 | [`.zshrc`](.zshrc) | `~/.zshrc` | Shell: history, completions, plugins, tools, prompt |
 | [`.functions`](.functions) | `~/.local/bin/.functions` | Custom shell functions (sourced by `.zshrc`) |
-| [`.gitconfig`](.gitconfig) | `~/.gitconfig` | Git defaults + aliases (identity lives in `~/.gitconfig.local`) |
+| [`.gitconfig`](.gitconfig) | `~/.gitconfig` | Git defaults (identity lives in `~/.gitconfig.local`) |
 | [`.gitignore_global`](.gitignore_global) | `~/.gitignore_global` | OS/editor/build junk ignored in **every** repo |
 | [`.editorconfig`](.editorconfig) | `~/.editorconfig` | Consistent whitespace across editors & languages |
 | [`ghostty_config`](ghostty_config) | `~/Library/Application Support/com.mitchellh.ghostty/config` | Terminal emulator config |
@@ -59,7 +59,7 @@ If you'd rather not run the script, the tools are:
 ```bash
 brew bundle --file=Brewfile
 # or, minimally:
-brew install fzf eza bat mise gh \
+brew install eza bat gh \
              zsh-autosuggestions zsh-syntax-highlighting bc
 git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 brew install --cask ghostty font-jetbrains-mono-nerd-font \
@@ -90,29 +90,13 @@ Defined in [`.functions`](.functions):
 | :--- | :--- |
 | `calc "<expr>"` | Quick precision CLI calculator (`noglob`, so `*` works). |
 | `brewdo` | `brew update && upgrade && cleanup -s` in one go. |
-| `gap "msg"` | `git add -A`, commit, push — **refuses** to auto-push on `main`/`master`. |
 | `myip` | Print your public IP. |
 | `del <files>` | Safe delete: lists targets and asks first (does **not** shadow `rm`). |
-| `mkcd <dir>` | Make a directory (and parents) and `cd` into it. |
 | `gclone <url\|owner/repo>` | Clone a repo and `cd` into it. Accepts GitHub shorthand. |
-| `extract <archive>` | Unpack almost any archive without remembering flags. |
 
-## 🔧 Git aliases
+## 🔧 Git defaults
 
-From [`.gitconfig`](.gitconfig) — run any as `git <alias>`:
-
-| Alias | Expands to |
-| :--- | :--- |
-| `st` | `status -sb` |
-| `co` / `sw` / `br` | `checkout` / `switch` / `branch` |
-| `lg` | Pretty one-line commit graph |
-| `last` | Show the most recent commit with its diffstat |
-| `undo` | Undo the last commit, keep changes staged |
-| `amend` | Amend the last commit, reuse the message |
-| `unstage` | Unstage files (`reset HEAD --`) |
-| `aliases` | List all configured aliases |
-
-Also enabled by default: `push.autoSetupRemote` (first push needs no `-u`),
+Enabled in [`.gitconfig`](.gitconfig): `push.autoSetupRemote` (first push needs no `-u`),
 rebase-on-pull, prune-on-fetch, `rerere`, histogram diffs, and `zdiff3`
 conflict markers.
 
@@ -122,10 +106,8 @@ conflict markers.
 - **Navigation** — `AUTO_CD` (type a dir to enter it), `AUTO_PUSHD`, and
   case-insensitive completion.
 - **Plugins** — `zsh-autosuggestions` + `zsh-syntax-highlighting`.
-- **[fzf](https://github.com/junegunn/fzf)** — `Ctrl-R` history, `Ctrl-T` files, `Alt-C` cd.
 - **[eza](https://github.com/eza-community/eza)** — `ls`/`ll`/`lt` (tree) with git awareness.
-- **[Oh My Zsh](https://ohmyzsh.sh)** — the prompt (`candy` theme) and the `git` plugin.
-- **[mise](https://mise.jdx.dev)** — one runtime manager for Python/Node/Go/etc.
+- **[Oh My Zsh](https://ohmyzsh.sh)** — the prompt (`candy` theme), with no plugins.
 
 Core tools (`cat`, `rm`) are intentionally left untouched — `bat` is available
 as `catp` and safe delete as `del`, so scripts and other machines behave normally.
